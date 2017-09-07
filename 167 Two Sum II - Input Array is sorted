@@ -50,6 +50,10 @@ class Solution {
 542
 */
 //result is 221 and 321.
+
+//呀！解决啦，加减符号问题
+//0ms
+//99.13%
 class Solution {
     public int[] twoSum(int[] numbers, int target) {
         int head = 0;
@@ -92,11 +96,11 @@ class Solution {
                     head = middle;
                 }else if(diff_temp>0){
                     while(head!=middle){
-                        diff_temp1 = numbers[middle+1]+numbers[end]-target;
+                        diff_temp1 = numbers[middle-1]+numbers[end]-target;
                         if(diff_temp1<0){
                             head = middle;
                         }else if(diff_temp1==0){
-                            middle++;
+                            middle--;
                             head = middle;
                             left = head;
                             right = end;
