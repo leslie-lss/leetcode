@@ -96,3 +96,76 @@ class Solution {
         return res;
     }
 }
+
+//利用二分查找对方法进行优化，预计运行速度更快
+//但是测试结果显示速度更慢。。。
+//这个速度超出我的预想。
+//分析其原因可能是因为这个问题要求找到所有的组合，在某一循环中，找到了满足条件的组合之后，不能直接跳过这一循环，而是要继续查询符合要求的组合。
+//这只是个人分析，还不能确定其正确性。
+//133ms
+//12.65%
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new LinkedList();
+        for(int i = 0; i<nums.length-2; i++){
+            if(i==0||(i>0&&nums[i]!=nums[i-1])){
+                int lo = i+1;
+                int hi = nums.length-1;
+                int sum = 0-nums[i];
+                while(lo<hi){
+                    if(nums[lo]+nums[hi]==sum){
+                        res.add(Arrays.asList(nums[i],nums[lo],nums[hi]));
+                        while(lo<hi&&nums[lo]==nums[lo+1])
+                            lo++;
+                        while(lo<hi&&nums[hi]==nums[hi-1])
+                            hi--;
+                        lo++;
+                        hi--;
+                    }else if(nums[lo]+nums[hi]>sum){
+                        if(lo+1==hi)
+                            break;
+                        int mid = (lo+hi)/2;
+                        while(hi!=mid){
+                            int diff = nums[lo]+nums[mid]-sum;
+                            int diff1 = nums[lo]+nums[mid+1]-sum;
+                            if(diff>=0){
+                                hi = mid;
+                            }else{
+                                if(diff1>0){
+                                    hi = mid;
+                                }else if(diff1==0){
+                                    mid++;
+                                    hi = mid;
+                                }else{
+                                    mid = (mid+hi)/2;
+                                }
+                            }
+                        }
+                    }else{
+                        if(lo+1==hi)
+                            break;
+                        int mid = (lo+hi)/2;
+                        while(lo!=mid){
+                            int diff = nums[hi]+nums[mid]-sum;
+                            int diff1 = nums[hi]+nums[mid-1]-sum;
+                            if(diff<=0){
+                                lo = mid;
+                            }else{
+                                if(diff1<0){
+                                    lo = mid;
+                                }else if(diff1==0){
+                                    mid--;
+                                    lo = mid;
+                                }else{
+                                    mid = (mid+lo)/2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
