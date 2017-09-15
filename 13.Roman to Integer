@@ -1,0 +1,64 @@
+/*
+    Given a roman numeral, convert it to an integer.
+
+    Input is guaranteed to be within the range from 1 to 3999.
+*/
+
+//将1～3999的罗马数字转换为阿拉伯数字
+//在已经了解罗马数字的规则的基础之上，对其进行转换时，发现从前往后会有些困难，应该从后往前一个一个转换（与前一个字符比大小）
+
+//89ms
+//92.88%
+class Solution {
+    public int romanToInt(String s) {
+        char[] arr = s.toCharArray();
+        int[] num = new int[arr.length];
+        int res = 0;
+        for(int i=0;i<arr.length;i++){
+            switch(arr[i]){
+                case 'M':
+                    num[i]=1000;
+                    break;
+                case 'D':
+                    num[i]=500;
+                    break;
+                case 'C':
+                    num[i]=100;
+                    break;
+                case 'L':
+                    num[i]=50;
+                    break;
+                case 'X':
+                    num[i]=10;
+                    break;
+                case 'V':
+                    num[i]=5;
+                    break;
+                case 'I':
+                    num[i]=1;
+                    break;
+                default:
+                    num[i]=0;
+                    break;
+            }
+        }
+        if(num.length==1){
+            return num[0];
+        }
+        for(int j = num.length-1; j>0;j--){
+            if(num[j]<=num[j-1]){
+                res+=num[j];
+                if(j==1){
+                    res=res+num[j-1];
+                }
+            }else{
+                res=res+num[j]-num[j-1];
+                j--;
+                if(j==1){
+                    res=res+num[j-1];
+                }
+            }
+        }
+        return res;
+    }
+}
