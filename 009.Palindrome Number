@@ -1,0 +1,44 @@
+/*
+    Determine whether an integer is a palindrome. Do this without extra space.
+
+    Some hints:
+
+    Could negative integers be palindromes? (ie, -1)
+
+    If you are thinking of converting the integer to string, note the restriction of using extra space.
+
+    You could also try reversing an integer. However, if you have solved the problem "Reverse Integer", you know that the reversed integer might overflow. How would you handle such case?
+
+    There is a more generic way of solving this problem.
+*/
+
+//判定是否为回文数（从左往右和从右往左的数字都一样，也就是与它的翻转数字相等）
+//目前还不太能够理解“Do this without extra space”具体的意思
+//在提交时出现错误，主要问题是，没有完全理解回文数的定义，负数都不是回文数
+
+//25ms
+//15.87%
+class Solution {
+    public boolean isPalindrome(int x) {
+        boolean res = true;
+        if(x==0){
+            return true;
+        }
+        if(x<0){
+            return false;
+        }
+        int i = 9;
+        while(x/(int)Math.pow(10,i)==0){
+            if(i<=0){
+                break;
+            }
+            i--;
+        }
+        for(int j = i; j>=i/2;j--){
+            if(x/(int)Math.pow(10,j)%10!=x/(int)Math.pow(10,i-j)%10){
+                return false;
+            }
+        }
+        return res;
+    }
+}
