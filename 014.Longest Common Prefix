@@ -1,0 +1,55 @@
+/*
+    Write a function to find the longest common prefix string amongst an array of strings. 
+*/
+
+//查找一个字符串数组中共同拥有的最长前缀字符串
+//利用substring()和startsWith()来进行前缀字符串的比较
+//其中substring(int m,int n)，m为起始索引位（包括m位），n为终止索引位（不包括n位）
+//在进行前缀的比较时，要注意字符串本身的长度可能比前缀的长度要短
+//另外，在进行字符串比较时“==”与equals()是不同的，在对数值用“==”时，比较的是数值本身，而String是一个对象，它存储的是对象的地址，并不是字符串本身
+//因此，在利用“==”对两个字符串的相同前缀进行比较时，返回为false。
+
+//12ms
+//38.56%
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        int i = 0;
+        if(strs.length==0){
+            return "";
+        }
+        if(strs.length==1){
+            return strs[0];
+        }
+        i++;
+        while((i<=strs[0].length())&&(i<=strs[1].length())&&(strs[0].substring(0,i).equals(strs[1].substring(0,i)))){
+            i++;
+        }
+        if(i==1){
+            
+            return "";
+        }
+        i--;
+        String str = strs[0].substring(0,i);
+        System.out.println(str);
+        if(strs.length==2){
+            return str;
+        }
+        for(int j = 2;j<strs.length;j++){
+            
+            if(strs[j].startsWith(str)){
+                continue;
+            }
+            if(strs[j].length()<str.length()){
+                i=strs[j].length();
+            }
+            while(!strs[j].substring(0,i).equals(str.substring(0,i))){
+                i--;
+                if(i==0){
+                    return "";
+                }
+            }
+            str = strs[j].substring(0,i);
+        }
+        return str;
+    }
+}
