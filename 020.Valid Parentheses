@@ -1,0 +1,68 @@
+/*
+    Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+    The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+*/
+
+//这个题非常适合利用栈来解决，利用栈后进先出的特点，来判定这些括号的有效性
+//在Java的API中，已经封装了Stack类，其中有方法empty()(判定栈是否为空)，peek()(查看栈顶部的对象)，push()(将对象压入堆栈)，pop()(移出堆栈)
+
+//8ms
+//89.29%
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> sta = new Stack<Character>();
+        char[] arr;
+        arr = s.toCharArray();
+        if(arr.length%2!=0){
+            return false;
+        }
+        for(int i = 0; i<arr.length;i++){
+            switch(arr[i]){
+                case '(':
+                case '{':
+                case '[':
+                    sta.push(arr[i]);
+                    break;
+                case ')':
+                    if(sta.empty()){
+                        return false;
+                    }else{
+                        if(sta.peek()!='(')
+                            return false;
+                        else
+                            sta.pop();
+                    }
+                    break;
+                case '}':
+                    if(sta.empty()){
+                        return false;
+                    }else{
+                        if(sta.peek()!='{')
+                            return false;
+                        else
+                            sta.pop();
+                    }
+                    
+                    break;
+                case ']':
+                    if(sta.empty()){
+                        return false;
+                    }else{
+                        if(sta.peek()!='[')
+                            return false;
+                        else
+                            sta.pop();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(sta.empty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
