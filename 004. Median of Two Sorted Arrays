@@ -20,13 +20,17 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 1
 	at __DriverSolution__.__helper__(__Driver__.java:8)
 	at __Driver__.main(__Driver__.java:54)
   
-  
+//第二版
+//编译通过
+//提交通过
+//93ms
+//17.39%
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int m=nums1.length;
         int n=nums2.length;
         int median=(m+n)/2;
-        double[] nums = new double[median];
+        double[] nums = new double[median+1];
         int flag1=0;
         int flag2=0;
         int flag=0;
