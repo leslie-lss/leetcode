@@ -1,0 +1,52 @@
+Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). 
+n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). 
+Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+Note: You may not slant the container and n is at least 2.
+
+//第一版
+//编译通过
+//提交不通过
+//经过反复实验,发现理解错意思,我以为是要结合木桶盛水的短板效应
+//如[2,1,2],我的理解是第二位的1为最小值,那么能盛水的量为1*3=3
+//但实际题目的意思为只关注两侧的边界大小,也就是2*2=4;如[2,1,3],它能盛水为2*2=4;
+//吐槽下这个题,题目本身没有解释清楚,应该举几个示例
+//自己想到用递归来做,还是很开心的
+class Solution {
+    public int maxArea(int[] height) {
+        if(height.length==0){
+            return 0;
+        }
+        if(height.length==1){
+            return height[0];
+        }
+        int head=0;
+        int end=height.length-1;
+        int water=0;
+        return find(height,head,end,water);
+    }
+    public int find(int[] height,int head,int end,int water){
+        if(head==end){
+            return water;
+        }
+        int min=head;
+        for(int i=head+1;i<=end;i++){
+            if(height[i]<height[min]){
+                min=i;
+            }
+        }
+        int water_temp=height[min]*(end-head);
+        if(water_temp>water){
+            water=water_temp;
+        }
+        if(min==head){
+            water=find(height,head+1,end,water);
+        }else if(min==end){
+            water=find(height,head,end-1,water);
+        }else{
+            water=find(height,head,min-1,water);
+            water=find(height,min+1,end,water);
+        }
+        return water;
+    }
+}
