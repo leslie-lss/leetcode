@@ -50,3 +50,45 @@ class Solution {
         return water;
     }
 }
+
+//第二版
+//理解了题意之后,利用地柜的思想,编程思路差不太多
+//6ms
+//100%
+//第一次击败100%的人,开心!!!!!!!!!
+
+class Solution {
+    public int maxArea(int[] height) {
+        int head=0;
+        int end=height.length-1;
+        int water=0;
+        return find(height,head,end,water);
+    }
+    public int find(int[] height,int head,int end,int water){
+        if(head==end){
+            return water;
+        }
+        if(height[head]<=height[end]){
+            int water_temp=height[head]*(end-head);
+            if(water_temp>water){
+                water=water_temp;
+            }
+            int i=head+1;
+            while(i<end&&height[i]<=height[head]){
+                i++;
+            }
+            water=find(height,i,end,water);
+        }else{
+            int water_temp=height[end]*(end-head);
+            if(water_temp>water){
+                water=water_temp;
+            }
+            int i=end-1;
+            while(head<i&&height[i]<=height[end]){
+                i--;
+            }
+            water=find(height,head,i,water);
+        }
+        return water;
+    }
+}
