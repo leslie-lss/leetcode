@@ -47,3 +47,23 @@ class Solution {
         return 0;
     }
 }
+
+//第二版
+//直接遍历，直到遇到比target大或等于的元素，返回该元素的位置即可
+//5ms
+//100%
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int i = 0;
+        if(nums.length==0){
+            return 0;
+        }
+        while(nums[i]<target){
+            i++;
+            if(i>=nums.length){
+                break;
+            }
+        }
+        return i;
+    }
+}
