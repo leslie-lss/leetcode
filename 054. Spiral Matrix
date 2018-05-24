@@ -1,0 +1,77 @@
+Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+Output: [1,2,3,6,9,8,7,4,5]
+Example 2:
+
+Input:
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+//设定left,right,up,down四个边界
+//重复调用自定义函数spiral()，直至出现边界重合的情况
+
+//3ms
+//64.92%
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> list = new ArrayList<Integer>();
+        int m = matrix.length;//行数
+        if(m==0){
+            return list;
+        }
+        int n = matrix[0].length;//列数
+        int left = 0;
+        int right = n-1;
+        int up = 0;
+        int down = m-1;
+        while(left<=right&&up<=down){
+            list = spiral(left,right,up,down,matrix,list);
+            left++;
+            right--;
+            up++;
+            down--;
+        }
+        return list;
+    }
+    public List<Integer> spiral(int left, int right,int up,int down,int[][] matrix,List<Integer> list){
+        //左右边界重合
+        if(left==right){
+            for(int i = up;i<=down;i++){//沿着重合的左右边界从上至下读取
+                list.add(matrix[i][left]);
+            }
+            return list;
+        }
+        //上下边界重合
+        if(up==down){
+            for(int j = left;j<=right;j++){//沿着重合的上下边界从左至右读取
+                list.add(matrix[up][j]);
+            }
+            return list;
+        }
+        //没有出现重合的情况
+        for(int j = left;j<=right;j++){//沿着上边界从左至右读取
+            list.add(matrix[up][j]);
+        }
+        for(int i = up+1;i<=down;i++){//沿着右侧边界从上至下读取
+            list.add(matrix[i][right]);
+        }
+        for(int j = right-1;j>=left;j--){//沿着下侧边界从右至左读取
+            list.add(matrix[down][j]);
+        }
+        for(int i = down-1;i>up;i--){//沿着左侧边界从下至上读取
+            list.add(matrix[i][left]);
+        }
+        return list;
+    }
+}
