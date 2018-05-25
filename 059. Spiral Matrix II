@@ -1,0 +1,68 @@
+Given a positive integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+
+Example:
+
+Input: 3
+Output:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+//利用之前54题构造的函数，进行简单的改造即可
+
+//第一版
+//2ms
+//100%
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] matrix = new int[n][n];
+        int left = 0;
+        int right = n-1;
+        int up = 0;
+        int down = n-1;
+        int value = 1;
+        while(left<=right&&up<=down){
+            spiral(left,right,up,down,matrix,value);
+            value=value+(right-left)*4;
+            left++;
+            right--;
+            up++;
+            down--;
+        }
+        return matrix;
+    }
+    public void spiral(int left, int right,int up,int down,int[][] matrix,int value){
+        int temp = value;
+        if(left==right){
+            for(int i = up;i<=down;i++){
+                matrix[i][left]=temp;
+                temp++;
+            }
+            return;
+        }
+        if(up==down){
+            for(int j = left;j<=right;j++){
+                matrix[up][j]=temp;
+                temp++;
+            }
+            return;
+        }
+        for(int j = left;j<=right;j++){
+            matrix[up][j]=temp;
+            temp++;
+        }
+        for(int i = up+1;i<=down;i++){
+            matrix[i][right]=temp;
+            temp++;
+        }
+        for(int j = right-1;j>=left;j--){
+            matrix[down][j]=temp;
+            temp++;
+        }
+        for(int i = down-1;i>up;i--){
+            matrix[i][left]=temp;
+            temp++;
+        }
+    }
+}
