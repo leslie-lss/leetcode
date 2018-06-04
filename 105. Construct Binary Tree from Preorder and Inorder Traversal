@@ -1,0 +1,76 @@
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+For example, given
+
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+Return the following binary tree:
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+//第一版
+//参考网上的博客
+//速度较慢是因为复制数组的操作
+//参照讨论区的阶梯方法可以进行改进，不需要进行复制数组的操作
+//39ms
+//7.04%
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder == null || inorder == null){
+            return null;
+        }
+        if(preorder.length != inorder.length || preorder.length==0){
+            return null;
+        }
+        int rootVal = preorder[0];
+        TreeNode root = new TreeNode(rootVal);
+        int count = 0;
+        for(int i : inorder){
+            if(i == rootVal){
+                break;
+            }
+            count++;
+        }
+        if(count>0){
+            int[] inorderLeft = new int[count];
+            int[] preorderLeft = new int[count];
+            inorderLeft = copy(inorder,0,count-1);
+            preorderLeft = copy(preorder,1,count);
+            root.left = buildTree(preorderLeft,inorderLeft);
+        }
+        int res = preorder.length-count-1;
+        if(res>0){
+            int[] inorderRight = new int[res];
+            int[] preorderRight = new int[res];
+            inorderRight = copy(inorder,count+1,inorder.length-1);
+            preorderRight = copy(preorder,count+1,preorder.length-1);
+            root.right = buildTree(preorderRight,inorderRight);
+        }
+        return root;
+    }
+    public int[] copy(int[] arr, int start, int end){
+        int[] arrCopy = new int[end-start+1];
+        int j = 0;
+        for(int i = start; i <= end; i++){
+            arrCopy[j] = arr[i];
+            j++;
+        }
+        return arrCopy;
+    }
+}
