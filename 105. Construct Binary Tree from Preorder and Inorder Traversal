@@ -74,3 +74,39 @@ class Solution {
         return arrCopy;
     }
 }
+
+//第二版
+//19ms
+//47.33%
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return solve(preorder, inorder, 0, 0, preorder.length);
+    }
+    public TreeNode solve(int[] preorder, int[] inorder, int startPre, int startIn, int len){
+        if(len<=0){
+            return null;
+        }
+        int rootVal = preorder[startPre];
+        TreeNode root = new TreeNode(rootVal);
+        int count = 0;
+        for(int i = startIn; i<startIn+len; i++){
+            if(inorder[i] == rootVal){
+                break;
+            }
+            count++;
+        }
+        int res = len-count-1;
+        root.left = solve(preorder, inorder, startPre+1, startIn, count);
+        root.right = solve(preorder, inorder, startPre+count+1, startIn+count+1,res);
+        return root;
+    }
+}
