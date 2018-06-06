@@ -1,0 +1,47 @@
+Given an unsorted integer array, find the smallest missing positive integer.
+
+Example 1:
+
+Input: [1,2,0]
+Output: 3
+Example 2:
+
+Input: [3,4,-1,1]
+Output: 2
+Example 3:
+
+Input: [7,8,9,11,12]
+Output: 1
+Note:
+
+Your algorithm should run in O(n) time and uses constant extra space.
+
+//第一版
+//数组的第i位存储数值i+1，第一个存储错误的位置j对应的数值j+1即为所求
+//13ms
+//80.47%
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if(nums == null){
+            return 1;
+        }
+        int n = nums.length;
+        if(n == 0){
+            return 1;
+        }
+        for(int i = 0; i<n; i++){
+            if(nums[i] != i+1 &&nums[i] >= 1 && nums[i] <= n && nums[nums[i]-1] != nums[i]){
+                int temp = nums[i];
+                nums[i] = nums[nums[i]-1];
+                nums[temp-1] = temp;
+                i--;
+            }
+        }
+        for(int j = 0; j<n; j++){
+            if(nums[j]!=j+1){
+                return j+1;
+            }
+        }
+        return n+1;
+    }
+}
