@@ -1,0 +1,45 @@
+/************************************************************
+Given an arbitrary ransom note string and another string containing letters from all the magazines, write a function that will return true if the ransom note can be constructed from the magazines ; otherwise, it will return false.
+
+Each letter in the magazine string can only be used once in your ransom note.
+
+Note:
+You may assume that both strings contain only lowercase letters.
+
+canConstruct("a", "b") -> false
+canConstruct("aa", "ab") -> false
+canConstruct("aa", "aab") -> true
+************************************************************/
+//6ms
+//99.68%
+class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+        if(ransomNote.length() > magazine.length()){
+            return false;
+        }
+        if( ransomNote.length() == 0){
+            return true;
+        }
+        char[] rArr = ransomNote.toCharArray();
+        char[] mArr = magazine.toCharArray();
+        for(int i = 0; i < rArr.length; i++){
+            int index = find(rArr[i], mArr, mArr.length - i - 1);
+            if(index != -1){
+                char temp = mArr[index];
+                mArr[index] = mArr[mArr.length - 1 - i];
+                mArr[mArr.length - 1 - i] = temp;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+    public int find(char c, char[] m, int flag){
+        for(int i = 0; i <= flag; i++){
+            if(c == m[i]){
+                return i;
+            }
+        }
+        return -1;
+    }
+}
