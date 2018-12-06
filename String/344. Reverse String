@@ -1,0 +1,44 @@
+/*****************************************************************
+Write a function that takes a string as input and returns the string reversed.
+
+Example 1:
+
+Input: "hello"
+Output: "olleh"
+Example 2:
+
+Input: "A man, a plan, a canal: Panama"
+Output: "amanaP :lanac a ,nalp a ,nam A"
+*****************************************************************/
+//第一种方法：递归
+//21ms
+//3.59%
+class Solution {
+    public String reverseString(String s) {
+        if(s.length() <= 1){
+            return s;
+        }
+        int mid = (s.length() - 1)/2;
+        String left = s.substring(0, mid + 1);
+        String right = s.substring(mid + 1, s.length());
+        String resLeft = reverseString(left);
+        String resRight = reverseString(right);
+        return resRight + resLeft;
+    }
+}
+//第二种：遍历
+//1ms
+//100%
+class Solution {
+    public String reverseString(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+        char[] sArr = s.toCharArray();
+        for(;left < right; left++,right--){
+            char temp = sArr[left];
+            sArr[left] = sArr[right];
+            sArr[right] = temp;
+        }
+        return new String(sArr);
+    }
+}
