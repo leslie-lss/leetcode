@@ -1,0 +1,89 @@
+/*************************************************************************
+Given a non-empty string check if it can be constructed by taking a substring of it and appending multiple copies of the substring together. You may assume the given string consists of lowercase English letters only and its length will not exceed 10000.
+
+ 
+
+Example 1:
+
+Input: "abab"
+Output: True
+Explanation: It's the substring "ab" twice.
+Example 2:
+
+Input: "aba"
+Output: False
+Example 3:
+
+Input: "abcabcabcabc"
+Output: True
+Explanation: It's the substring "abc" four times. (And the substring "abcabc" twice.)
+*************************************************************************/
+
+//第一版
+//9ms
+//99.33%
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        char head = s.charAt(0);
+        char tail = s.charAt(s.length() - 1);
+        for(int i = 0; i < s.length()/2; i++){
+            if(s.charAt(i) == tail){
+                boolean flag = isPattern(s,i);
+                if(flag){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean isPattern(String s, int i){
+        if(s.length() % (i + 1) != 0){
+            return false;
+        }
+        int needle = i + 1;
+        String pat = s.substring(0,i+1);
+        while(needle < s.length()){
+            if(!pat.equals(s.substring(needle, needle + i + 1))){
+                return false;
+            }
+            needle = needle + i + 1;
+        }
+        return true;
+    }
+}
+
+//第二版
+//14ms
+//90.73%
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        char head = s.charAt(0);
+        char tail = s.charAt(s.length() - 1);
+        for(int i = s.length()/2; i >= 0; i--){
+            if(s.charAt(i) == tail){
+                boolean flag = isPattern(s,i);
+                if(flag){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean isPattern(String s, int i){
+        if(s.length() / (i+1) < 2){
+            return false;
+        }
+        if(s.length() % (i + 1) != 0){
+            return false;
+        }
+        int needle = i + 1;
+        String pat = s.substring(0,i+1);
+        while(needle < s.length()){
+            if(!pat.equals(s.substring(needle, needle + i + 1))){
+                return false;
+            }
+            needle = needle + i + 1;
+        }
+        return true;
+    }
+}
