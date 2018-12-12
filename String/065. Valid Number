@@ -1,0 +1,102 @@
+/********************************************************************************
+Validate if a given string can be interpreted as a decimal number.
+
+Some examples:
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+" -90e3   " => true
+" 1e" => false
+"e3" => false
+" 6e-1" => true
+" 99e2.5 " => false
+"53.5e93" => true
+" --6 " => false
+"-+3" => false
+"95a54e53" => false
+
+Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. However, here is a list of characters that can be in a valid decimal number:
+
+Numbers 0-9
+Exponent - "e"
+Positive/negative sign - "+"/"-"
+Decimal point - "."
+Of course, the context of these characters also matters in the input.
+********************************************************************************/
+
+//40ms
+//24.68%
+class Solution {
+    public boolean isNumber(String s) {
+        s = s.trim();
+        if(s.equals("")){
+            return false;
+        }
+        String[] nums = s.split("e", 2);
+        if(nums.length == 1){
+            if(nums[0].equals(s)){
+                return isInteger(nums[0]) || isFloat(nums[0]);
+            }else{
+                return false;
+            }
+        }else if(nums.length == 2){
+            return (isInteger(nums[0]) || isFloat(nums[0])) && isInteger(nums[1]);
+        }else{
+            return false;
+        }
+    }
+    public boolean isInteger(String s){
+        if(s.equals("")){
+            return false;
+        }
+        char[] ch = s.toCharArray();
+        if(ch[0] == 43 || ch[0] == 45){
+            if(ch.length == 1){
+                return false;
+            }
+        }
+        if(ch[0] != 43 && ch[0] != 45 && (ch[0] < 48 || ch[0] > 57)){
+            return false;
+        }
+        for(int i = 1; i < ch.length; i++){
+            if(ch[i] < 48 || ch[i] > 57){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean isFloat(String s){
+        if(s.equals("")){
+            return false;
+        }
+        String[] nums = s.split("\\.", 2);
+        System.out.println(nums.length+"");
+        if(nums.length == 1){
+            return isInteger(nums[0]);
+        }else if(nums.length == 2){
+            if(nums[0].equals("") || nums[0].equals("+") || nums[0].equals("-")){
+                return isFloatInt(nums[1]);
+            }
+            if(nums[1].equals("")){
+                return isInteger(nums[0]);
+            }
+            return isInteger(nums[0]) && isFloatInt(nums[1]);
+        }else{
+            return false;
+        }
+    }
+    public boolean isFloatInt(String s){
+        if(s.equals("")){
+            return false;
+        }
+        char[] ch = s.toCharArray();
+        for(int i = 0; i < ch.length; i++){
+            if(ch[i] < 48 || ch[i] > 57){
+                return false;
+            }
+        }
+        return true;
+    }  
+}
