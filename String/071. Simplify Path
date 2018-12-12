@@ -1,0 +1,61 @@
+/*****************************************************************
+Given an absolute path for a file (Unix-style), simplify it. 
+
+For example,
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+path = "/a/../../b/../c//.//", => "/c"
+path = "/a//b////c/d//././/..", => "/a/b/c"
+
+In a UNIX-style file system, a period ('.') refers to the current directory, so it can be ignored in a simplified path. Additionally, a double period ("..") moves up a directory, so it cancels out whatever the last directory was. For more information, look here: https://en.wikipedia.org/wiki/Path_(computing)#Unix_style
+
+Corner Cases:
+
+Did you consider the case where path = "/../"?
+In this case, you should return "/".
+Another corner case is the path might contain multiple slashes '/' together, such as "/home//foo/".
+In this case, you should ignore redundant slashes and return "/home/foo".
+*****************************************************************/
+
+//20ms
+//43.85%
+class Solution {
+    public String simplifyPath(String path) {
+        String[] s = path.split("\\/+");
+        if(s.length == 0){
+            return "/";
+        }
+        String[] res = new String[s.length];
+        int flag = 0;
+        res[0] = "/";
+        for(int i = 0; i < s.length; i++){
+            if(s[i].equals(".") || s[i].equals("")){
+                continue;
+            }
+            if(s[i].equals("..")){
+                if(flag == 0){
+                    res[0] = "/";
+                    continue;
+                }else{
+                    flag--;
+                    if(flag == 0){
+                        res[flag] = "/";
+                    }else{
+                        res[flag] = "";
+                    }
+                    continue;
+                }
+            }
+            res[flag] = "/" + s[i];
+            flag++;
+        }
+        StringBuffer result = new StringBuffer();
+        for(int i = 0; i < res.length; i++){
+            if(res[i] == null){
+                break;
+            }
+            result.append(res[i]);
+        }
+        return result.toString();
+    }
+}
