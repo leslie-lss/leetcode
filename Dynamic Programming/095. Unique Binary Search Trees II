@@ -1,0 +1,92 @@
+/****************************************************************************************
+Given an integer n, generate all structurally unique BST's (binary search trees) that store values 1 ... n.
+
+Example:
+
+Input: 3
+Output:
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+Explanation:
+The above output corresponds to the 5 unique BST's shown below:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+****************************************************************************************/
+
+//3ms
+//43.83%
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        ArrayList<ArrayList<TreeNode>> res = new ArrayList<ArrayList<TreeNode>>();
+        ArrayList<TreeNode> tree0 = new ArrayList<TreeNode>();
+        if(n==0){
+            return tree0;
+        }
+        ArrayList<TreeNode> tree1 = new ArrayList<TreeNode>();
+        TreeNode root0 = null;
+        tree0.add(root0);
+        res.add(tree0);
+        TreeNode root1 = new TreeNode(1);
+        tree1.add(root1);
+        res.add(tree1);
+        for(int i = 2; i < n+1; i++){
+            int j = 1;
+            ArrayList<TreeNode> tree = new ArrayList<TreeNode>();
+            while(j <= i){
+                ArrayList<TreeNode> left = res.get(j-1);
+                ArrayList<TreeNode> right_temp = res.get(i-j);
+                ArrayList<TreeNode> right = new ArrayList<TreeNode>();
+                for(int k = 0; k < right_temp.size(); k++){
+                    TreeNode t = right_temp.get(k);
+                    right.add(changeVal(t, j));
+                }
+                tree.addAll(mergeList(left,right,j));
+                j++;
+            }
+            res.add(tree);
+        }
+        return res.get(n);
+    }
+    public TreeNode changeVal(TreeNode root, int v){
+        if(root == null){
+            TreeNode node = null;
+            return node;
+        }
+        TreeNode t = new TreeNode(root.val+v);
+        t.left = changeVal(root.left, v);
+        t.right = changeVal(root.right, v);
+        return t;
+    }
+    public ArrayList<TreeNode> mergeList(List<TreeNode> left, List<TreeNode> right, int v){
+        ArrayList<TreeNode> res = new ArrayList<TreeNode>();
+        
+        for(TreeNode le:left){
+            for(TreeNode r:right){
+                TreeNode root = new TreeNode(v);
+                root.left = le;
+                root.right = r;
+                res.add(root);
+            
+            }
+        }
+        return res;
+    }
+}
