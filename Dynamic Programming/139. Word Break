@@ -1,0 +1,105 @@
+/***********************************************************************************************
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+***********************************************************************************************/
+
+//第一版
+//超时，失败
+//递归方法
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s == "" || s == null){
+            return true;
+        }
+        for(int i = 0; i < wordDict.size(); i++){
+            String word = wordDict.get(i);
+            boolean flag = false;
+            if(s.startsWith(word)){
+                if(word.length() == s.length()){
+                    return true;
+                }
+                flag = wordBreak(s.substring(word.length(), s.length()), wordDict);
+            }
+            if(flag == true){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+//第二版
+//9ms
+//52.91%
+//already：存放已经检测过是否有下一个单词的字符串
+//ready：存放待检测是否有下一个单词的字符串
+//wrong：存放检测结果为没有下一个单词的字符串
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s == "" || s == null){
+            return true;
+        }
+        HashSet<String> already = new HashSet<String>();
+        HashSet<String> ready = new HashSet<String>();
+        HashSet<String> wrong = new HashSet<String>();
+        for(int i = 0; i < wordDict.size(); i++){
+            String word = wordDict.get(i);
+            if(s.startsWith(word)){
+                if(word.length() == s.length()){
+                    return true;
+                }else{
+                    ready.add(word);
+                }
+            }
+        }
+        while(!ready.isEmpty()){
+            String head = ready.iterator().next();
+            if(wrong.contains(head) || already.contains(head)){
+                ready.remove(head);
+                continue;
+            }
+            String last = s.substring(head.length(), s.length());
+            boolean flag = false;
+            for(int i = 0; i < wordDict.size(); i++){
+                String word = wordDict.get(i);
+                if(last.startsWith(word)){
+                    flag = true;
+                    if(word.length() == last.length()){
+                        return true;
+                    }else{
+                        String new_head = head + word;
+                        if(!wrong.contains(new_head) && !already.contains(new_head)){
+                            ready.add(new_head);
+                        }
+                    }
+                }
+            }
+            if(flag == false){
+                wrong.add(head);
+            }
+            already.add(head);
+            ready.remove(head);
+        }
+        return false;
+    }
+}
