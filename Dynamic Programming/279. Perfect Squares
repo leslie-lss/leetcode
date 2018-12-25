@@ -13,6 +13,7 @@ Output: 2
 Explanation: 13 = 4 + 9.
 ***************************************************************************************************/
 
+//第一版
 //401ms
 //9.48%
 class Solution {
@@ -32,6 +33,70 @@ class Solution {
             min = min < temp ? min : temp;
         }
         map.put(n, min);
+        return min;
+    }
+}
+
+//第二版
+//558ms
+//5.49%
+class Solution {
+    public int numSquares(int n) {
+        int[] res = new int[n+1];
+        res[0] = 0;
+        res[1] = 1;
+        int flag = 2;
+        for(int i = 2; i <= n; i++){
+            if(i == flag * flag){
+                res[i] = 1;
+                flag++;
+            }else{
+                res[i] = find(res, i);
+            }
+        }
+        return res[n];
+    }
+    public int find(int[] res, int i){
+        int start = 1;
+        int end = i - 1;
+        int min = Integer.MAX_VALUE;
+        while(start <= end){
+            int temp = res[start] + res[end];
+            min = min <= temp ? min : temp;
+            start++;
+            end--;
+        }
+        return min;
+    }
+}
+
+//第三版
+//31ms
+//63.98%
+class Solution {
+    public int numSquares(int n) {
+        int[] res = new int[n+1];
+        res[0] = 0;
+        res[1] = 1;
+        int flag = 2;
+        for(int i = 2; i <= n; i++){
+            if(i == flag * flag){
+                res[i] = 1;
+                flag++;
+            }else{
+                res[i] = find(res, i);
+            }
+        }
+        return res[n];
+    }
+    public int find(int[] res, int i){
+        int j = 1;
+        int min = Integer.MAX_VALUE;
+        while(i - j*j > 0){
+            int temp = res[i-j*j] + 1;
+            min = min <= temp ? min : temp;
+            j++;
+        }
         return min;
     }
 }
