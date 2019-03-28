@@ -1,0 +1,84 @@
+//参考LinkedHashMap底层实现原理，HashMap+双向循环链表
+//HashMap存key和node，存储数据，及时定位
+//双向循环链表头部和尾部header和tail，用来维护访问顺序
+//capacity限制容量
+//count计算现有元素数量
+class LRUCache {
+    class LRUNode{
+        int key;
+        int value;
+        LRUNode before;
+        LRUNode after;
+    }
+    private void refresh(int key){
+        LRUNode node = removeNode(key);
+        addNode(node);
+    }
+    private LRUNode removeNode(int key){
+        LRUNode node = cache.get(key);
+        LRUNode before = node.before;
+        LRUNode after = node.after;
+        before.after = after;
+        after.before = before;
+        node.before = null;
+        node.after = null;
+        cache.remove(key);
+        this.count--;
+        return node;
+    }
+    private void addNode(LRUNode node){
+        if(this.count == this.capacity)
+            removeEldestNode();
+        LRUNode before = tail.before;
+        LRUNode after = tail;
+        node.before = before;
+        node.after = after;
+        before.after = node;
+        after.before = node;
+        cache.put(node.key, node);
+        this.count++;
+    }
+    private void removeEldestNode(){
+        LRUNode node = header.after;
+        removeNode(node.key);
+    }
+    private HashMap<Integer, LRUNode> cache = new HashMap<Integer, LRUNode>();
+    private int capacity;
+    private int count;
+    private LRUNode header, tail;
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.count = 0;
+        header = new LRUNode();
+        tail = new LRUNode();
+        header.before = tail;
+        header.after = tail;
+        tail.before = header;
+        tail.after = header;
+    }
+    
+    public int get(int key) {
+        if(!cache.containsKey(key))
+            return -1;
+        refresh(key);
+        return cache.get(key).value;
+    }
+    
+    public void put(int key, int value) {
+        LRUNode node = new LRUNode();
+        if(cache.containsKey(key)){
+            node = removeNode(key);
+        }else{
+            node.key = key;
+        }
+        node.value = value;
+        addNode(node);
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
